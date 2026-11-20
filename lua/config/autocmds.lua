@@ -16,3 +16,34 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.spell = false
   end,
 })
+
+-- 打开真实文件后，自动把 cwd 切到该文件所属的 git 仓库根目录。
+-- LazyVim 默认不自动 cd，若从子目录/别处启动 nvim，cwd 会停在非仓库目录，
+-- 导致 snacks 的 git_status (<Space>gs) 等基于 git root 的功能报
+-- "Command failed" + "No results found for git_status"。
+-- 只对普通文件生效（跳过终端/quickfix/浮窗等 buftype 非空的 buffer）；
+-- 仅在根目录与当前 cwd 不同时才 cd，避免反复触发 DirChanged。
+vim.api.nvim_create_autocmd("BufEnter", {
+  group = vim.api.nvim_create_augroup("user_auto_git_root", { clear = true }),
+  callback = function(ev)
+    if vim.bo[ev.buf].buftype ~= "" then
+      return
+    end
+    local file = vim.api.nvim_buf_get_name(ev.buf)
+    if file == "" then
+      return
+    end
+    -- 注意：Windows 上这里不要传 type="both"（会导致 find 返回空）；
+    -- 默认参数即可正确找到 .git（目录或文件均可）。
+    local git = vim.fs.find(".git", { path = vim.fs.dirname(file), upward = true })
+    if not git[1] then
+      return
+    end
+    local root = vim.fs.normalize(vim.fn.fnamemodify(git[1], ":h"))
+    local cwd = vim.fs.normalize(vim.fn.getcwd())
+    local same = vim.fn.has("win32") == 1 and root:lower() == cwd:lower() or root == cwd
+    if not same then
+      vim.cmd("silent cd " .. vim.fn.fnameescape(root))
+    end
+  end,
+})
