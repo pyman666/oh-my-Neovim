@@ -1,0 +1,2 @@
+# 本机专属配置：路径因人而异，只留本机，不进 git / 备份
+lua/config/machine.lua
