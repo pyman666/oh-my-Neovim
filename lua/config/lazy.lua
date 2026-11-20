@@ -24,6 +24,8 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.python" },
     -- surround 用 LazyVim 官方的 mini.surround（gsa/gsd/gsr...，核心已预留 gs 分组）
     { import = "lazyvim.plugins.extras.coding.mini-surround" },
+    -- 光标移动拖尾残影特效
+    { import = "lazyvim.plugins.extras.ui.smear-cursor" },
     -- 自己的插件
     { import = "plugins" },
   },
