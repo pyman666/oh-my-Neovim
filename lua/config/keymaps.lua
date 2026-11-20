@@ -9,8 +9,8 @@ map("c", "%%", function()
   return "%%"
 end, { expr = true, desc = "Expand %% to current file directory" })
 
--- <C-l> 清搜索高亮并重绘
-map("n", "<C-l>", "<cmd>nohlsearch<CR><C-l>", { desc = "Clear search highlight and redraw" })
+-- <C-l> 不再自定义：交还给 LazyVim 默认的窗口切换（与 C-h/j/k 一致）。
+-- 搜索高亮由 LazyVim 默认的 <Esc>（noh）和 <leader>ur 清理，无需占用 C-l。
 
 -- 普通/可视模式下 & 重复上一次替换（保留标志位）
 map({ "n", "x" }, "&", ":&&<CR>", { silent = true, desc = "Repeat last :substitute" })
