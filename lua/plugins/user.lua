@@ -1,5 +1,6 @@
 -- 从 ~/.vimrc 迁移的插件 + 输入法切换插件。
 -- LazyVim 已自带 lualine/gitsigns/ts-comments/nvim-lspconfig 等，不再重复装 airline/gitgutter/commentary/lsp。
+-- surround / 注释也已改用 LazyVim 官方方案（mini.surround / 原生 gc），见 lazy.lua。
 return {
   {
     "pyman666/vim-im-switch",
@@ -12,15 +13,6 @@ return {
       vim.g.vim_im_switch_on_leave = 1
       vim.g.vim_im_switch_on_exit = 1
     end,
-  },
-  {
-    "tpope/vim-surround",
-    event = "VeryLazy",
-    desc = "ys/cs/ds 修改包围符号",
-  },
-  {
-    "tpope/vim-repeat",
-    event = "VeryLazy",
   },
   {
     "tpope/vim-sleuth",

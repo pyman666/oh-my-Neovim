@@ -22,6 +22,8 @@ require("lazy").setup({
     -- 从 ~/.vimrc 迁移过来的功能：文件树（替代 NERDTree）、Python LSP（pyright）
     { import = "lazyvim.plugins.extras.editor.snacks_explorer" },
     { import = "lazyvim.plugins.extras.lang.python" },
+    -- surround 用 LazyVim 官方的 mini.surround（gsa/gsd/gsr...，核心已预留 gs 分组）
+    { import = "lazyvim.plugins.extras.coding.mini-surround" },
     -- 自己的插件
     { import = "plugins" },
   },
