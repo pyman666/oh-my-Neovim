@@ -20,7 +20,7 @@ nvim
 
 1. 从 `lua/config/machine.example.lua` 生成 `lua/config/machine.lua`（不进 git）
 2. 安装 lazy.nvim / LazyVim 及插件
-3. 用 gh-proxy.com 镜像 clone（见下）
+3. 安装插件（需要能访问 GitHub；走代理请自行在系统中开全局 proxy）
 
 ## 本机配置：`machine.lua`
 
@@ -59,7 +59,6 @@ brew tap daipeihust/tap && brew install im-select
 
 ## 网络与工具（国内环境）
 
-- `lua/config/lazy.lua` 给 Neovim 子进程设 `GIT_CONFIG_*`，把 `https://github.com/` 重写到 `gh-proxy.com` 镜像（之前的 `ghproxy.net` 已失效）；直连可用时注释掉即可。
 - Mason 的自动安装和 registry 自动刷新已关闭（`lua/plugins/mason.lua`）；`stylua` / `shfmt` / `tree-sitter` 手动装在 `~/.local/bin`。
 - macOS 上 `~/.npm/_cacache` 有过去的 root 属主文件，会让 npm 装 `json-lsp` 报 `EACCES`；配置里给 Neovim 子进程换到 `~/.npm-cache-nvim`，不改全局 npm 配置。Windows 无此问题。
 
@@ -80,7 +79,7 @@ LazyVim 已自带的（lualine / gitsigns / ts-comments / nvim-lspconfig 等）�
 ├── init.lua                    # 入口：生成并加载 machine.lua
 └── lua/
     ├── config/
-    │   ├── lazy.lua            # lazy.nvim / LazyVim bootstrap、镜像、npm 缓存
+    │   ├── lazy.lua            # lazy.nvim / LazyVim bootstrap、npm 缓存
     │   ├── machine.example.lua # 本机配置模板（进 git）
     │   ├── machine.lua         # 本机值（不进 git）
     │   ├── options.lua         # 原 vimrc 选项 + winget PATH 探测
