@@ -1,8 +1,9 @@
--- GitHub 直连不通的环境（国内网络）：让 git clone 走 ghproxy 镜像。
+-- GitHub 直连不通的环境（国内网络）：让 git clone 走 gh-proxy.com 镜像。
 -- 只对 Neovim 子进程生效，不改全局 git 配置；以后直连可用或开了本地代理，
 -- 注释掉下面三行即可恢复直连。放在 bootstrap 之前，lazy.nvim 自身也走镜像。
+-- 之前用的 ghproxy.net 已失效（连接超时 / 503），2026-11 换到 gh-proxy.com。
 vim.env.GIT_CONFIG_COUNT = "1"
-vim.env.GIT_CONFIG_KEY_0 = "url.https://ghproxy.net/https://github.com/.insteadOf"
+vim.env.GIT_CONFIG_KEY_0 = "url.https://gh-proxy.com/https://github.com/.insteadOf"
 vim.env.GIT_CONFIG_VALUE_0 = "https://github.com/"
 
 -- macOS: ~/.npm/_cacache 里有过去 sudo npm 留下的 root 属主文件，npm 写不进去，
