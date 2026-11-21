@@ -3,11 +3,12 @@
 -- incsearch/termguicolors/splitbelow/splitright/clipboard 等）不再重复。
 -- 这里只保留原配置中跟 LazyVim 默认值不同、且仍有意义的项。
 
--- LazyVim 依赖几个外部 CLI：treesitter main 需要 C 编译器，snacks picker 需要 fd/rg。
--- winget 把它们装进带 hash/版本号的目录，且只更新用户 PATH，
--- 对已经打开的终端 / GUI 快捷方式不生效，所以这里直接探测并补进 Neovim 的 PATH。
+-- 按 OS 分支补齐外部 CLI：
+-- Windows: winget 把 gcc/fd/rg 装到带 hash 的目录且只改用户 PATH，
+--          已打开的终端不生效，所以这里直接探测并补进 Neovim 的 PATH。
+-- macOS:   工具在 ~/.local/bin（zshrc 已加进 PATH），无需探测。
+-- 其他:    假定工具已在 PATH。
 if vim.fn.has("win32") == 1 then
-  -- winget 根目录来自 machine.lua（留空则跳过探测，改用系统 PATH 里的工具）
   local winget_root = vim.g.machine_winget_packages or ""
   if winget_root ~= "" then
     local winget = vim.fn.expand(winget_root)
@@ -30,6 +31,10 @@ if vim.fn.has("win32") == 1 then
     add_bin(find_exe("sharkdp.fd_*/**/fd.exe"))
     add_bin(find_exe("BurntSushi.ripgrep.MSVC_*/**/rg.exe"))
   end
+elseif vim.fn.has("macunix") == 1 then
+  -- macOS: fd/rg/tree-sitter 等都在 ~/.local/bin，PATH 已由 zshrc 设置
+else
+  -- Linux 等其他平台：假定工具已在 PATH
 end
 
 local opt = vim.opt

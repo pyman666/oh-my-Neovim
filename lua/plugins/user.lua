@@ -1,19 +1,46 @@
--- 从 ~/.vimrc 迁移的插件 + 输入法切换插件。
--- LazyVim 已自带 lualine/gitsigns/ts-comments/nvim-lspconfig 等，不再重复装 airline/gitgutter/commentary/lsp。
+-- 从 ~/.vimrc 迁移的插件；LazyVim 已自带 lualine/gitsigns/ts-comments/nvim-lspconfig 等，
+-- 不再重复装 airline/gitgutter/commentary/lsp。
 -- surround / 注释也已改用 LazyVim 官方方案（mini.surround / 原生 gc），见 lazy.lua。
+--
+-- 输入法切换：一套代码同时兼容 Windows / macOS。
+-- 配置层不做 OS 判断；后端选择全在插件内部：
+--   has('win32')   -> Python + PostMessage(WM_INPUTLANGCHANGEREQUEST)
+--   has('macunix') -> im-select + TISSelectInputSource
+-- 两台机器放同一份代码即可，不需要按平台换插件来源。
+local im_source = vim.g.machine_im_plugin or "~/Documents/Scripts/vim-im-switch"
+local im_is_path = im_source:sub(1, 1) == "~"
+  or im_source:sub(1, 1) == "/"
+  or im_source:match("^%a:[\\/]") ~= nil
+
+local im_switch = {
+  lazy = false,
+  init = function()
+    -- 只透传 machine.lua 里的本机值；en/zh 的 OS 默认值由插件内部决定。
+    if vim.g.machine_python and vim.g.machine_python ~= "" then
+      vim.g.vim_im_switch_python = vim.g.machine_python
+    end
+    if vim.g.machine_im_select and vim.g.machine_im_select ~= "" then
+      vim.g.vim_im_switch_im_select = vim.g.machine_im_select
+    end
+    if vim.g.machine_im_en and vim.g.machine_im_en ~= "" then
+      vim.g.vim_im_switch_en = vim.g.machine_im_en
+    end
+    if vim.g.machine_im_zh and vim.g.machine_im_zh ~= "" then
+      vim.g.vim_im_switch_zh = vim.g.machine_im_zh
+    end
+    vim.g.vim_im_switch_on_enter = 1
+    vim.g.vim_im_switch_on_leave = 1
+    vim.g.vim_im_switch_on_exit = 1
+  end,
+}
+if im_is_path then
+  im_switch.dir = vim.fn.expand(im_source)
+else
+  im_switch[1] = im_source
+end
+
 return {
-  {
-    "pyman666/vim-im-switch",
-    lazy = false,
-    init = function()
-      -- 用绝对路径（来自 machine.lua），避免 GUI 快捷方式 / 终端 PATH 不一致
-      -- machine.lua 缺失时回退到 PATH 里的 python
-      vim.g.vim_im_switch_python = vim.g.machine_python or "python"
-      vim.g.vim_im_switch_on_enter = 1
-      vim.g.vim_im_switch_on_leave = 1
-      vim.g.vim_im_switch_on_exit = 1
-    end,
-  },
+  im_switch,
   {
     "tpope/vim-sleuth",
     event = "VeryLazy",
@@ -29,5 +56,15 @@ return {
     "MattesGroeger/vim-bookmarks",
     event = "VeryLazy",
     desc = "mm/mn/mp/ma 书签；沿用原按键",
+  },
+  -- vimrc 里的 vim-table-mode：<leader>ta 开关，表格角符用 |
+  {
+    "dhruvasagar/vim-table-mode",
+    init = function()
+      vim.g.table_mode_corner = "|"
+    end,
+    keys = {
+      { "<leader>ta", "<cmd>TableModeToggle<CR>", desc = "Toggle table mode (old vimrc key)" },
+    },
   },
 }

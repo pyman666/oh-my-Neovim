@@ -1,3 +1,18 @@
+-- GitHub 直连不通的环境（国内网络）：让 git clone 走 ghproxy 镜像。
+-- 只对 Neovim 子进程生效，不改全局 git 配置；以后直连可用或开了本地代理，
+-- 注释掉下面三行即可恢复直连。放在 bootstrap 之前，lazy.nvim 自身也走镜像。
+vim.env.GIT_CONFIG_COUNT = "1"
+vim.env.GIT_CONFIG_KEY_0 = "url.https://ghproxy.net/https://github.com/.insteadOf"
+vim.env.GIT_CONFIG_VALUE_0 = "https://github.com/"
+
+-- macOS: ~/.npm/_cacache 里有过去 sudo npm 留下的 root 属主文件，npm 写不进去，
+-- 导致 Mason 装 json-lsp 报 EACCES。只对 Neovim 子进程换一个干净缓存目录，
+-- 不改全局 npm 配置（想彻底修好可以手动跑 sudo chown -R $(whoami) ~/.npm）。
+-- Windows 没有这个问题，沿用 npm 自己的默认缓存。
+if vim.fn.has("macunix") == 1 then
+  vim.env.npm_config_cache = vim.fn.expand("~/.npm-cache-nvim")
+end
+
 -- bootstrap lazy.nvim, LazyVim and your plugins
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then

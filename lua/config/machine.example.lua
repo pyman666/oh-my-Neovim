@@ -7,12 +7,34 @@
 --
 -- 参考 theniceboy/nvim 的 _machine_specific.vim 做法：
 -- 模板公开、实际值留本机，避免把个人路径写进主配置。
+-- 按 OS 分支：Windows 用 winget + Python；macOS 用 im-select；
+-- 其他平台暂时不启用输入法切换。
 -- ============================================================
 
--- Python 解释器绝对路径：输入法切换脚本 (bin/im_switch.py) 用它调用。
--- 用绝对路径是为了避免 GUI 快捷方式 / 终端 PATH 不一致导致找不到 python。
-vim.g.machine_python = "C:/Users/hen5szh/AppData/Local/anaconda3/python.exe"
+local is_win = vim.fn.has("win32") == 1
+local is_mac = vim.fn.has("macunix") == 1
 
--- winget 包安装根目录：options.lua 从这里探测 gcc / fd / rg。
--- 留空字符串 "" 则跳过探测（比如改用系统 PATH 里已有的工具）。
-vim.g.machine_winget_packages = "~/AppData/Local/Microsoft/WinGet/Packages"
+if is_win then
+  -- 输入法切换脚本 (bin/im_switch.py) 用的 Python 绝对路径
+  vim.g.machine_python = "C:/Users/hen5szh/AppData/Local/anaconda3/python.exe"
+  -- winget 安装根目录，options.lua 从这里探测 gcc/fd/rg；留空则跳过探测
+  vim.g.machine_winget_packages = "~/AppData/Local/Microsoft/WinGet/Packages"
+  -- Windows 输入法：US Keyboard / 微软拼音（也可直接写 1033 / 2052）
+  vim.g.machine_im_en = "en"
+  vim.g.machine_im_zh = "zh"
+
+elseif is_mac then
+  -- macOS 不需要 Python / winget，全部留空
+  vim.g.machine_python = ""
+  vim.g.machine_winget_packages = ""
+  -- 和 Windows 同一个思路：直接切「输入源」而不是模拟切换键切「模式」。
+  -- 系统有两个启用的输入源：ABC（英文）/ 简体拼音（中文）。
+  -- 用 `im-select`（无参数）可查看当前 ID；切换：im-select <id>。
+  vim.g.machine_im_select = "~/.local/bin/im-select"
+  vim.g.machine_im_en = "com.apple.keylayout.ABC"
+  vim.g.machine_im_zh = "com.apple.inputmethod.SCIM.ITABC"
+
+else
+  vim.g.machine_python = ""
+  vim.g.machine_winget_packages = ""
+end

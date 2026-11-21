@@ -1,5 +1,9 @@
 -- 原 ~/.vimrc 里的 LSP autocmd 由 LazyVim 原生 LSP + pyright extra 取代。
--- 输入法切换由插件 vim-im-switch 自己的 autocmd 处理，这里无需重复配置。
+-- 输入法切换由 vim-im-switch 插件自己按 OS 注册 autocmd：
+--   Windows → InsertLeave/Enter/Exit 异步调 Python + PostMessage
+--   macOS   → 同样三个 autocmd 异步调 im-select (TIS API)，直接切输入源
+-- 两个平台都不模拟按键、不切 IME 内部模式（那条路慢且不稳，见 README）。
+-- 这里无需重复配置。
 
 -- 关掉拼写检查。
 -- LazyVim 默认的 wrap_spell autocmd 会对 text/markdown/gitcommit 等文件设
