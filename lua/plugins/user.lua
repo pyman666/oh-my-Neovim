@@ -2,17 +2,12 @@
 -- 不再重复装 airline/gitgutter/commentary/lsp。
 -- surround / 注释也已改用 LazyVim 官方方案（mini.surround / 原生 gc），见 lazy.lua。
 --
--- 输入法切换：一套代码同时兼容 Windows / macOS。
+-- 输入法切换：一套代码同时兼容 Windows / macOS，由 lazy.nvim 按标准方式安装。
 -- 配置层不做 OS 判断；后端选择全在插件内部：
 --   has('win32')   -> Python + PostMessage(WM_INPUTLANGCHANGEREQUEST)
 --   has('macunix') -> im-select + TISSelectInputSource
--- 两台机器放同一份代码即可，不需要按平台换插件来源。
-local im_source = vim.g.machine_im_plugin or "~/Documents/Scripts/vim-im-switch"
-local im_is_path = im_source:sub(1, 1) == "~"
-  or im_source:sub(1, 1) == "/"
-  or im_source:match("^%a:[\\/]") ~= nil
-
 local im_switch = {
+  "pyman666/vim-im-switch",
   lazy = false,
   init = function()
     -- 只透传 machine.lua 里的本机值；en/zh 的 OS 默认值由插件内部决定。
@@ -33,11 +28,6 @@ local im_switch = {
     vim.g.vim_im_switch_on_exit = 1
   end,
 }
-if im_is_path then
-  im_switch.dir = vim.fn.expand(im_source)
-else
-  im_switch[1] = im_source
-end
 
 return {
   im_switch,
