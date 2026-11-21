@@ -19,8 +19,7 @@ nvim
 首次启动会：
 
 1. 从 `lua/config/machine.example.lua` 生成 `lua/config/machine.lua`（不进 git）
-2. 安装 lazy.nvim / LazyVim 及插件
-3. 安装插件（需要能访问 GitHub）
+2. 安装 lazy.nvim / LazyVim 及插件（需要能访问 GitHub）
 
 ## 本机配置：`machine.lua`
 
@@ -78,7 +77,7 @@ LazyVim 已自带的（lualine / gitsigns / ts-comments / nvim-lspconfig 等）�
 ├── init.lua                    # 入口：生成并加载 machine.lua
 └── lua/
     ├── config/
-    │   ├── lazy.lua            # lazy.nvim / LazyVim bootstrap、npm 缓存
+    │   ├── lazy.lua            # lazy.nvim / LazyVim bootstrap
     │   ├── machine.example.lua # 本机配置模板（进 git）
     │   ├── machine.lua         # 本机值（不进 git）
     │   ├── options.lua         # 原 vimrc 选项 + winget PATH 探测
