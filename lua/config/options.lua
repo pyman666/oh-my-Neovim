@@ -63,6 +63,6 @@ opt.wildcharm = 9                   -- <Tab>
 opt.wildoptions = "pum"
 opt.pumheight = 50                  -- LazyVim 默认 10，按原配置改回 50
 
-opt.wrap = true                     -- LazyVim 默认 no-wrap，按原配置改回
+opt.wrap = false                    -- 代码默认不换行；md/纯文本由 user_wrap 按文件类型打开
 opt.breakindent = true
 opt.guifont = "JetBrainsMono Nerd Font Mono:h11"

@@ -12,12 +12,18 @@
 -- 用户配置在 lazyvim.config.autocmds 之后加载，所以能可靠覆盖。
 pcall(vim.api.nvim_del_augroup_by_name, "lazyvim_wrap_spell")
 
-vim.api.nvim_create_autocmd("FileType", {
+-- 只有这些“纯文本/文档”类文件换行；代码一律不换行。
+-- wrap 是窗口级选项：同一个窗口从 md 切到代码时必须显式复位，否则会残留 wrap。
+local wrap_filetypes = { "text", "plaintex", "typst", "gitcommit", "markdown" }
+
+vim.api.nvim_create_autocmd({ "BufEnter", "FileType" }, {
   group = vim.api.nvim_create_augroup("user_wrap", { clear = true }),
-  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
-  callback = function()
-    vim.opt_local.wrap = true
-    vim.opt_local.spell = false
+  callback = function(ev)
+    local should_wrap = vim.tbl_contains(wrap_filetypes, vim.bo[ev.buf].filetype)
+    vim.opt_local.wrap = should_wrap
+    if should_wrap then
+      vim.opt_local.spell = false
+    end
   end,
 })
 
