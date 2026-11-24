@@ -11,6 +11,12 @@
 -- 其他平台暂时不启用输入法切换。
 -- ============================================================
 
+-- 内置终端 shell：留空则沿用系统默认 shell（Windows cmd.exe / macOS zsh）。
+-- 【Win专属】要用 pwsh 就填真实 exe 路径；PATH 里的 pwsh 是 Store 的 0 字节 alias，
+-- nvim 不能直接 jobstart 它。含空格的路径直接写字符串即可；
+-- 要带参数就写 list，例如 { "cmd.exe", "/c", "pwsh" }。
+vim.g.machine_terminal_shell = ""
+
 local is_win = vim.fn.has("win32") == 1
 local is_mac = vim.fn.has("macunix") == 1
 
