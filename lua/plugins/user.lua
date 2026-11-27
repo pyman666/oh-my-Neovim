@@ -45,16 +45,6 @@ return {
   {
     "MattesGroeger/vim-bookmarks",
     event = "VeryLazy",
-    desc = "mm/mn/mp/ma 书签；沿用原按键",
-  },
-  -- vimrc 里的 vim-table-mode：<leader>ta 开关，表格角符用 |
-  {
-    "dhruvasagar/vim-table-mode",
-    init = function()
-      vim.g.table_mode_corner = "|"
-    end,
-    keys = {
-      { "<leader>ta", "<cmd>TableModeToggle<CR>", desc = "Toggle table mode (old vimrc key)" },
-    },
+    desc = "书签（插件默认键）",
   },
 }

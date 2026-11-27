@@ -29,6 +29,3 @@ end
 
 map("x", "*", function() search_visual("/") end, { desc = "Search selection forward" })
 map("x", "#", function() search_visual("?") end, { desc = "Search selection backward" })
-
--- 原来的 <leader>tr (NERDTree) 改成 LazyVim 自带的文件树
-map("n", "<leader>tr", "<leader>fe", { remap = true, desc = "File explorer (old NERDTree key)" })
